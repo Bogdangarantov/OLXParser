@@ -115,6 +115,7 @@ class OLXAdvParser:
         checked = check_page.text
         return checked.split('"')[-2]
 
+
 # https://www.olx.ua/api/v1/offers/731969272/phones/
 
 list_links = get_links_from("https://www.olx.ua/detskiy-mir/detskaya-odezhda/")
