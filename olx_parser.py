@@ -57,8 +57,11 @@ class OLXAdvParser:
         date_of_publ = soup.find("span", class_="css-19yf5ek").text
         return date_of_publ
 
-    def get_photo(self, url):
-        img = urllib.request.urlopen(url).read()
+    def get_photo(self):
+        req = requests.get(self.url)
+        soup = BeautifulSoup(req.text, "lxml")
+        img_url = soup.find("img").get("src")
+        img = urllib.request.urlopen(img_url).read()
         with open("img.jpg", "wb") as out:
             out.write(img)
         return 1
@@ -116,12 +119,13 @@ class OLXAdvParser:
         return checked.split('"')[-2]
 
 
-# https://www.olx.ua/api/v1/offers/731969272/phones/
+# https://www.olx.ua/api/v1/offers/740762310/phones/
 
 list_links = get_links_from("https://www.olx.ua/detskiy-mir/detskaya-odezhda/")
-for i in list_links[0:10]:
+for i in list_links[0:1]:
     print(i)
     user = OLXAdvParser(i, bearer="Bearer af71501ae28c1acf1d6da52f92bb5ba48904e90e")
+    print(user.get_photo())
     print(user.get_price())
     print(user.get_name())
     print(user.get_date())
