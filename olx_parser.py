@@ -62,9 +62,10 @@ class OLXAdvParser:
         soup = BeautifulSoup(req.text, "lxml")
         img_url = soup.find("img").get("src")
         img = urllib.request.urlopen(img_url).read()
-        with open("img.jpg", "wb") as out:
+
+        with open("{}.jpg".format(img_url.split("/")[-2]), "wb") as out:
             out.write(img)
-        return 1
+        return img_url.split("/")[-2]
 
     def get_date(self):
         req = requests.get(self.url)
