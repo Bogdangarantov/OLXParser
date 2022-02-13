@@ -74,6 +74,10 @@ class OLXAdvParser:
         views = self.soup.find("div", class_="css-1ferwkx").find("span", class_="css-1qvxqpo")
         return views
 
+    def get_desk(self):
+        desk = self.soup.find("div", class_="css-g5mtbi-Text").text
+        return desk
+
     def get_price(self):
         price = self.soup.find("h3", class_="css-okktvh-Text eu5v0x0").text
         try:
