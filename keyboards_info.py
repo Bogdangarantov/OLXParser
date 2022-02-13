@@ -1,9 +1,30 @@
+main_menu_dict = {'profile': '👤Профиль',
+                  'settings': 'Категории',
+                  'parse': 'Начать парсинг',
+                  'subscription': "Подписка"}
+admin_main_menu_dict = {'settings': 'Категории',
+                        'parse': 'Начать парсинг',
+                        "Make_code": "Сгенерировать код",
+                        "add_token": "Добавить токен"}
 
-main_menu_dict = {'settings':'Настройки','Profile':'Профиль'}
-
-category = ['detskiy-mir', 'nedvizhimost', 'transport', 'zapchasti-dlya-transporta', 'zhivotnye', 'dom-i-sad',
-            'elektronika', 'uslugi', 'moda-i-stil', 'hobbi-otdyh-i-sport']
-
+subscription = {'to_subscribe': 'Получить подписку',
+                'enter_code': 'Ввести код',
+                'back_to_menu': 'Назад'}
+category = ['detskiy-mir',
+            'nedvizhimost',
+            'transport',
+            'zapchasti-dlya-transporta',
+            'zhivotnye', 'dom-i-sad',
+            'elektronika', 'uslugi',
+            'moda-i-stil',
+            'hobbi-otdyh-i-sport']
+make_code = {"one_hour": '1 Час',
+             "three_hours": '3 Часа',
+             "five_hours": '5 Часов',
+             "twelve_hours": '12 Часов',
+             "one_day": '1 День',
+             "three_days": '3 Дня',
+             "Forever": "Навсегда"}
 category_dict = {'transport': 'Авто',
                  'nedvizhimost': 'Недвижимость',
                  'dom-i-sad': 'Дом-сад',
@@ -56,14 +77,14 @@ subcategory = {
                   'tovary-dlya-zhivotnyh': 'Аксессуары'},
 
     'dom-i-sad': {'mebel': 'Мебель',
-                       'stroitelstvo-remont': 'Строймат',
-                       'sprzet-agd': 'Техника',
-                       "kantstovary-rashodnye-materialy": "Канцтовары",
-                       "produkty-pitaniya-napitki": "Продукты и напитки",
-                       "sad-ogorod": "Сад-огород",
-                       'predmety-interera': 'Интерьер',
-                       'instrumenty': 'Инструменты',
-                       'prochie-tovary-dlya-doma': 'Другое', },
+                  'stroitelstvo-remont': 'Строймат',
+                  'sprzet-agd': 'Техника',
+                  "kantstovary-rashodnye-materialy": "Канцтовары",
+                  "produkty-pitaniya-napitki": "Продукты и напитки",
+                  "sad-ogorod": "Сад-огород",
+                  'predmety-interera': 'Интерьер',
+                  'instrumenty': 'Инструменты',
+                  'prochie-tovary-dlya-doma': 'Другое', },
 
     'detskiy-mir': {'igrushki': 'Игрушки',
                     'detskaya-odezhda': 'Одежда ',
@@ -73,8 +94,6 @@ subcategory = {
                     'detskaya-mebel': 'Мебель',
                     'detskie-avtokresla': 'Авто-Кресла',
                     'prochie-detskie-tovary': 'Другое', },
-
-
 
     'elektronika': {'telefony-i-aksesuary': 'Телефоны',
                     'planshety-el-knigi-i-aksessuary': 'Планшеты',

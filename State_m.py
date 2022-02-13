@@ -2,7 +2,16 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
 class States(StatesGroup):
-    permission_accepted = State()
+    normal_permission = State()
+    subscribtion = State()
+    admin = State()
+    # //////////Admin///////////
+    parse = State()
+    make_code = State()
+    add_token = State()
+    # /////////Entering_Code///
+    subscription = State()
+    enter_code = State()
     # /////////MAIN_MENU///////
     settings = State()
     profile = State()
