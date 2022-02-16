@@ -3,14 +3,24 @@
       {
          "id": 491541363,
          "username": "me_gusta_ito",
-         "category-to-parse": "",
-         "date": "2022-02-11 08:10:53"
+         "category": "moda-i-stil",
+         "subcategory": "krasota-zdorove",
+         "keyword": "",
+         "filters": [
+            "registration"
+         ],
+         "blacklist_of_words": [],
+         "date": "0 days 0 hours"
       },
       {
          "id": 5010376753,
          "username": "vas_realo",
-         "category-to-parse": "",
-         "date": "2022-02-12 09:43:11"
+         "category": "hobbi-otdyh-i-sport",
+         "subcategory": "",
+         "keyword": "",
+         "filters": [],
+         "blacklist_of_words": [],
+         "date": "0 days 0 hours"
       }
    ]
 }

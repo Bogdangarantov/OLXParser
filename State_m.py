@@ -8,10 +8,13 @@ class States(StatesGroup):
     # //////////Admin///////////
     parse = State()
     make_code = State()
-    add_token = State()
+    add_token_file = State()
     # /////////Entering_Code///
     subscription = State()
     enter_code = State()
+    code_is_false = State()
+    # /////////FILTERS///////
+    filters = State()
     # /////////MAIN_MENU///////
     settings = State()
     profile = State()
@@ -33,4 +36,8 @@ class States(StatesGroup):
     detskiy_mir = State()
     # ////////////////////////
     hobbi_otdyh_i_sport = State()
+    # ////////////////////////
+    enter_keyword_or_no = State()
+    # ////////////////////////
+    enter_keyword = State()
     # ////////////////////////
