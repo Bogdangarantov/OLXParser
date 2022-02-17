@@ -82,6 +82,22 @@ class Defs:
         return keyb__admin_main_menu
 
     @staticmethod
+    def price_keyb():
+        price_keyboard = InlineKeyboardMarkup(row_width=1)
+        for key in price.keys():
+            elem = price.get(key)
+            price_keyboard.row(InlineKeyboardButton(text=elem, callback_data=key))
+        return price_keyboard
+
+    @staticmethod
+    def blacklist_keyb():
+        keyb = InlineKeyboardMarkup(row = 1)
+        for key in blackist.keys():
+            elem = blackist.get(key)
+            keyb.row(InlineKeyboardButton(text=elem, callback_data=key))
+        return keyb
+
+    @staticmethod
     def code_is_false():
         code_keyb = InlineKeyboardMarkup(row_width=2)
         row = []
@@ -187,10 +203,17 @@ class Defs:
     @staticmethod
     def filterr(filter):
         print(list(filter))
-        if len(filter) == 0 :
+        if len(filter) == 0:
             return "Пусто"
         else:
-            for i in range (len(filter)):
+            for i in range(len(filter)):
                 print(filter[i])
                 filter[i] = filters.get(filter[i])
             return filter
+
+    @staticmethod
+    def reformat_token_file(file: list):
+        for i in range(len(file)):
+            file[i] = file[i].replace('\n', '')
+        return file
+

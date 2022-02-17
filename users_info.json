@@ -3,22 +3,12 @@
       {
          "id": 491541363,
          "username": "me_gusta_ito",
-         "category": "moda-i-stil",
-         "subcategory": "krasota-zdorove",
-         "keyword": "",
-         "filters": [
-            "registration"
-         ],
-         "blacklist_of_words": [],
-         "date": "0 days 0 hours"
-      },
-      {
-         "id": 5010376753,
-         "username": "vas_realo",
-         "category": "hobbi-otdyh-i-sport",
+         "category": "",
          "subcategory": "",
          "keyword": "",
-         "filters": [],
+         "price_high": "123",
+         "price_low": "20",
+         "registration": "",
          "blacklist_of_words": [],
          "date": "0 days 0 hours"
       }

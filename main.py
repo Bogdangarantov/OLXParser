@@ -5,6 +5,7 @@ from defs import Defs
 from admins import *
 from State_m import *
 from keyboards_info import *
+from olx_parser import *
 # Libraries import
 import json
 from datetime import datetime, timedelta
@@ -42,7 +43,9 @@ async def ComandStart(message: types.Message):
                                           "category": "",
                                           "subcategory": "",
                                           "keyword": "",
-                                          "filters":[],
+                                          "price_high": "",
+                                          "price_low": "",
+                                          "registration": "",
                                           "blacklist_of_words":[],
                                           "date": "0 days 0 hours"
                                           })
@@ -291,6 +294,7 @@ async def filter (call:types.CallbackQuery,state:FSMContext):
     callback = call.data
     print(f"{datetime.now()}  log--> FILTERS  {call.from_user.id}")
     await bot.delete_message(call.message.chat.id, call.message.message_id)
+    await state.finish()
     with open('users_info.json') as f :
         users = json.load(f)
     index = 0
@@ -299,18 +303,31 @@ async def filter (call:types.CallbackQuery,state:FSMContext):
             index = ind
             break
     if callback == 'clear_filters':
-        users['users-active'][index]['filters']=[]
+        users['users-active'][index]['price_high']=''
+        users['users-active'][index]['price_low']=''
+        users['users-active'][index]['registration']=''
         await call.message.answer('Список фильтров очищен',
-                                  reply_markup=Defs().main_menu())
+                                  reply_markup=Defs().filters())
+        await States.filters.set()
         if call.from_user.id in admin_ids:
             await call.message.answer('Главное меню:', reply_markup=Defs().admin_keyb_main_menu())
             await States.admin.set()
         else:
             await call.message.answer('Главное меню:', reply_markup=Defs().main_menu())
             await States.normal_permission.set()
+    elif callback == 'registration':
+        await call.message.answer(f'Введите минимальный год реестрации пользователя :')
+        await States.registration.set()
+    elif callback == 'price':
+        await call.message.answer(f'Выберите конфигурацию цены :',reply_markup=Defs().price_keyb())
+        await States.price.set()
     elif callback == 'black_list_of_words':
-        await call.message.answer(f'Черный список слов:\n{users["users-active"][index]["black_list_of_words"]}',reply_markup=Defs().filters())
-
+        text = ''
+        for i in users["users-active"][index]["blacklist_of_words"]:
+            text +=i+'\n'
+        await call.message.answer(f'Черный список слов:\n{text}',reply_markup=Defs().blacklist_keyb())
+        await States.blacklist_add.set()
+        # TODO
     elif callback == 'back_to_menu':
         if call.from_user.id in admin_ids:
             await call.message.answer('Главное меню:', reply_markup=Defs().admin_keyb_main_menu())
@@ -318,14 +335,116 @@ async def filter (call:types.CallbackQuery,state:FSMContext):
         else:
             await call.message.answer('Главное меню:', reply_markup=Defs().main_menu())
             await States.normal_permission.set()
-    elif callback in filters.keys() :
-        if callback not in users['users-active'][index]['filters']:
-            users['users-active'][index]['filters'].append(callback)
-            await call.message.answer(f'Фильтр {callback} '
-                                      f'добавлен',reply_markup=Defs().main_menu())
-            await States.normal_permission.set()
+
     with open('users_info.json','w')as f :
         json.dump(users,f,indent=3)
+@dp.message_handler(state = States.registration)
+async def regitration_filter(message:types.Message,state:FSMContext):
+    date = message.text
+    await state.finish()
+    with open('users_info.json') as f :
+        users = json.load(f)
+    index = 0
+    for ind,user in enumerate(users['users-active']) :
+        if user['id'] == message.from_user.id :
+            index = ind
+    # TODO Дата Регистрации  Microsoft TO DO
+    index_ = 0
+    users['users-active'][index]['registration'] = f'{date}'
+    with open('users_info.json','w') as f :
+        json.dump(users,f,indent=3)
+    await message.answer('Фильтр даты регистрации добавлен', reply_markup=Defs().filters())
+    await States.filters.set()
+
+
+@dp.callback_query_handler(state = States.price)
+async def price_filter(call:types.CallbackQuery,state:FSMContext):
+    callback = call.data
+    await state.finish()
+    if callback == 'enter_high_price' :
+        await call.message.answer('Введите максимальную цену')
+        await States.price_high_enter.set()
+    elif callback == 'enter_low_price' :
+        await call.message.answer('Введите минимальную цену')
+        await States.price_low_enter.set()
+    elif callback == 'back_to_menu' :
+        await call.message.answer('Фильтры', reply_markup=Defs().filters())
+        await States.filters.set()
+@dp.message_handler(state =States.price_high_enter)
+async def price_enter_high(message:types.Message,state:FSMContext):
+    price = message.text
+    await state.finish()
+    with open("users_info.json") as f:
+        users = json.load(f)
+    index = 0
+    for ind,user in enumerate(users['users-active']) :
+        if user['id'] == message.from_user.id :
+            index = ind
+    # TODO цены  Microsoft TO DO
+    users['users-active'][index]['price_high'] = f'{price}'
+    with open('users_info.json','w')as f :
+        json.dump(users,f,indent=3)
+    await message.answer('Фильтр максимальной цены добавлен',reply_markup=Defs().filters())
+    await States.filters.set()
+
+@dp.message_handler(state =States.price_low_enter)
+async def price_enter_high(message:types.Message,state:FSMContext):
+    price = message.text
+    await state.finish()
+    with open('users_info.json') as f :
+        users = json.load(f)
+    index = 0
+    for ind,user in enumerate(users['users-active']) :
+        if user['id'] == message.from_user.id :
+            index = ind
+    # TODO цены  Microsoft TO DO
+    users['users-active'][index]['price_low'] = f'{price}'
+    with open('users_info.json','w')as f :
+        json.dump(users,f,indent=3)
+    await message.answer('Фильтр минимальной цены добавлен',reply_markup=Defs().filters())
+    await States.filters.set()
+
+@dp.callback_query_handler(state = States.blacklist_add)
+async def blacklist_filter(call:types.CallbackQuery,state:FSMContext):
+    callback = call.data
+    await state.finish()
+    with open('users_info.json') as f :
+        users = json.load(f)
+    indexindex = 0
+    for ind, user in enumerate(users['users-active']):
+        if user['id'] == call.from_user.id:
+            index = ind
+    if callback == 'add_word' :
+        await call.message.answer('Введите слово :')
+        await States.blacklist_enter.set()
+        # TODO
+    elif callback == 'delete_all':
+        users['users-active'][index]['blacklist_of_words']=[]
+        await call.message.answer('Черный список очищен', reply_markup=Defs().filters())
+        await States.normal_permission.set()
+    elif callback == 'back_to_menu':
+            await call.message.answer('Фильтры', reply_markup=Defs().filters())
+            await States.filters.set()
+
+    with open('users_info.json','w')as f :
+        json.dump(users,f,indent=3)
+
+@dp.message_handler(state = States.blacklist_enter)
+async def blacklist_enter_filter(message:types.Message,state :FSMContext):
+    word = message.text
+    await state.finish()
+    with open('users_info.json') as f :
+        users = json.load(f)
+    indexindex = 0
+    for ind, user in enumerate(users['users-active']):
+        if user['id'] == message.from_user.id:
+            index = ind
+    users['users-active'][index]['blacklist_of_words'].append(word)
+    with open('users_info.json','w')as f :
+        json.dump(users,f,indent=3)
+    await message.answer('Слово добавлено в фильтры', reply_markup=Defs().filters())
+    await States.filters.set()
+
 
 @dp.callback_query_handler(state=States.settings)
 async def categories(call: types.CallbackQuery, state: FSMContext):
@@ -764,7 +883,7 @@ async def enter_keyword_or_no(call:types.CallbackQuery,state:FSMContext):
 @dp.message_handler(state=States.enter_keyword)
 async def enter_keyword(message: types.Message, state: FSMContext):
     keyword = message.text
-    print(f"{datetime.now()}  log--> ENTERING KEYWORD  {call.from_user.id}")
+    print(f"{datetime.now()}  log--> ENTERING KEYWORD  {message.from_user.id}")
     await state.finish()
     with open("users_info.json") as f:
         users = json.load(f)
@@ -786,10 +905,53 @@ async def parsing(call: types.CallbackQuery, state: FSMContext):
     print(f"{datetime.now()}  log--> START PARSING  {call.from_user.id}")
     with open("users_info.json") as f:
         users = json.load(f)
+    category_parse = ''
+    subcategory_parse = ''
+    keyword_parse = ''
     for ind, user in enumerate(users["users-active"]):
         if user["id"] == call.from_user.id:
             if Defs().check_date(user['date']):
-                print(f"{datetime.now()}  log--> PARSER {call.from_user.id}")
+                category_parse = user['category']
+                subcategory_parse = user['subcategory']
+                keyword_parse = user['keyword']
+                filters_parse = user['filters']
+                blacklist_parse = user['blacklist_of_words']
+    if category_parse != '' :
+        if subcategory_parse !='':
+            if keyword_parse !='':
+                if filters_parse != []:
+                    if blacklist_parse != []:
+                        link = link_generator_by_subcategory(category_parse,subcategory_parse)
+                        link = link_generator_for_search_by_keyword(link,keyword_parse)
+                        list_links = get_links_from(link)
+                        with open("token_files/texttt.txt",'r') as f :
+                            token_file = f
+                            token_file = Defs().reformat_token_file(token_file)
+                        for i in range(len(list_links)):
+                            print(i)
+                            user = OLXAdvParser(i, bearer="Bearer af71501ae28c1acf1d6da52f92bb5ba48904e90e")
+                            price =user.get_price()
+                            name = user.get_name()
+                            date = user.get_date()
+                            date_of_publ = user.get_date_of_publ()
+                            name_of_adv = user.get_name_of_adv()
+                            phone = user.get_phone()
+                            description = user.get_description()
+                            description_pass = True
+                            for i in blacklist_parse :
+                                if i in description :
+                                    description_pass = False
+
+                            if phone[0]!= '+':
+                                try:
+                                    ph = phone.copy()
+                                    ph = int(ph)
+
+                                except Exception:
+                                    print(f"{datetime.now()}  log--> UNCORRECT PHONE  {call.from_user.id}")
+
+                        # user_parser = OLXAdvParser()
+
 
 
 

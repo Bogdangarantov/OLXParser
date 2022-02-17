@@ -16,10 +16,16 @@ subscription = {'to_subscribe': '🛒Получить подписку',
                 'enter_code': '📝Ввести код',
                 'back_to_menu': '🔙Назад'}
 filters = {'registration': 'Регистрация',
-           'count_of_advert': 'Кол-во обьявлений',
+           'price': 'Цена',
            'black_list_of_words': 'Черный список слов',
            'clear_filters': 'Очистить фильтры',
-           'back_to_menu':'Назад'}
+           'back_to_menu': 'Назад'}
+price = {'enter_high_price': 'Ввести максимальную цену',
+         'enter_low_price': 'Ввести минимальную цену',
+         'back_to_menu': 'Назад'}
+blackist = {'add_word': 'Добавить слово',
+            'delete_all': 'Удалить все слова',
+            'back_to_menu': 'Назад'}
 category = ['detskiy-mir',
             'nedvizhimost',
             'transport',

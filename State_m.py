@@ -15,6 +15,12 @@ class States(StatesGroup):
     code_is_false = State()
     # /////////FILTERS///////
     filters = State()
+    registration = State()
+    blacklist_add = State()
+    blacklist_enter = State()
+    price = State()
+    price_high_enter = State()
+    price_low_enter = State()
     # /////////MAIN_MENU///////
     settings = State()
     profile = State()

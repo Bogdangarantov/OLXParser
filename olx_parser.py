@@ -5,7 +5,7 @@ import urllib.request
 
 def link_generator_for_search_by_keyword(link_category: str, keywords: str):
     words = keywords.split(" ")
-    link = link_category + "q-" + "-".join(words)
+    link = link_category + "q-" + "-".join(words) +'/'
     return link
 
 
@@ -38,6 +38,8 @@ def price_link(link: str, price_a_from="", num_a_from="", price_a_to="", num_a_t
 
     return price_link_
 
+def next_page(url: str, page: int):
+    return url + f"?page={page}/"
 
 class OLXAdvParser:
     def __init__(self, url: str, bearer: str):
@@ -74,9 +76,9 @@ class OLXAdvParser:
         views = self.soup.find("div", class_="css-1ferwkx").find("span", class_="css-1qvxqpo")
         return views
 
-    def get_desk(self):
-        desk = self.soup.find("div", class_="css-g5mtbi-Text").text
-        return desk
+    def get_description(self):
+        description = self.soup.find("div", class_="css-g5mtbi-Text").text
+        return description
 
     def get_price(self):
         price = self.soup.find("h3", class_="css-okktvh-Text eu5v0x0").text
@@ -107,15 +109,15 @@ class OLXAdvParser:
         return checked.split('"')[-2]
 
 
-# https://www.olx.ua/api/v1/offers/731969272/phones/
-
-list_links = get_links_from("https://www.olx.ua/detskiy-mir/detskaya-odezhda/")
-for i in list_links[0:10]:
-    print(i)
-    user = OLXAdvParser(i, bearer="Bearer af71501ae28c1acf1d6da52f92bb5ba48904e90e")
-    print(user.get_price())
-    print(user.get_name())
-    print(user.get_date())
-    print(user.get_date_of_publ())
-    print(user.get_name_of_adv())
-    print(user.get_phone())
+# # https://www.olx.ua/api/v1/offers/731969272/phones/
+#
+# list_links = get_links_from("https://www.olx.ua/detskiy-mir/detskaya-odezhda/")
+# for i in list_links[0:10]:
+#     print(i)
+#     user = OLXAdvParser(i, bearer="Bearer af71501ae28c1acf1d6da52f92bb5ba48904e90e")
+#     print(user.get_price())
+#     print(user.get_name())
+#     print(user.get_date())
+#     print(user.get_date_of_publ())
+#     print(user.get_name_of_adv())
+#     print(user.get_phone())
